@@ -399,29 +399,6 @@ table.doc-table td strong { color: var(--goldL); font-family: var(--font-head); 
 .sintese-col.verde .sintese-item:nth-child(odd)  { background: rgba(26,90,46,.12); }
 .sintese-col.verm  .sintese-item:nth-child(odd)  { background: rgba(123,16,16,.12); }
 
-/* ── PENDÊNCIAS ── */
-.pend-item {
-  display: grid; grid-template-columns: 36px 1fr auto;
-  gap: 12px; align-items: start;
-  background: var(--navy2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
-  transition: border-color .2s;
-}
-.pend-item:hover { border-color: var(--blueM); }
-.pend-num {
-  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
-  color: var(--textD); text-align: center; padding-top: 2px;
-}
-.pend-desc { font-size: 14px; line-height: 1.5; }
-.pend-dest { font-family: var(--font-mono); font-size: 11px; color: var(--textD); margin-top: 4px; }
-.pend-badge {
-  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-  padding: 3px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
-  text-transform: uppercase; letter-spacing: .05em;
-}
-.pend-badge.crit  { background: rgba(192,57,43,.25); color: #ff8070; border: 1px solid rgba(231,76,60,.4); }
-.pend-badge.alta  { background: rgba(212,134,10,.2); color: #ffc947; border: 1px solid rgba(240,165,0,.4); }
-.pend-badge.media { background: rgba(26,79,138,.25); color: var(--blueL); border: 1px solid var(--border); }
 
 /* ── NOTA METODOLÓGICA ── */
 .nota-metodologica {
@@ -1263,79 +1240,6 @@ mark { background: rgba(200,162,39,.35); color: var(--goldL); border-radius: 2px
       </div>
     </div>
     <p style="font-size:12px;color:var(--textD);margin-top:4px">* A.D. = Atividade Delegada com convênio vigente e plano de trabalho que preveja expressamente a atribuição listada.</p>
-  </div>
-
-    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
-      <div class="pend-num" style="color:var(--greenL)">1</div>
-      <div>
-        <div class="pend-desc"><strong>✔ RESOLVIDA — Decreto nº 4.960/2026</strong> — texto integral recebido em PDF oficial assinado eletronicamente (SEI 0405698). Valores definitivos incorporados ao guia.</div>
-        <div class="pend-dest">→ Concluída em 07/05/2026</div>
-      </div>
-      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
-    </div>
-
-    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
-      <div class="pend-num" style="color:var(--greenL)">2</div>
-      <div>
-        <div class="pend-desc"><strong>✔ RESOLVIDA — Decreto nº 4.947/2026</strong> — texto integral recebido em PDF oficial. Composição, finalidades, competências e medidas do GIAF incorporados ao guia.</div>
-        <div class="pend-dest">→ Concluída em 07/05/2026</div>
-      </div>
-      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
-    </div>
-
-    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
-      <div class="pend-num" style="color:var(--greenL)">3</div>
-      <div>
-        <div class="pend-desc"><strong>✔ RESOLVIDA — Lei 1.415/1993</strong> — texto integral recebido em PDF original assinado de 1993. Mapeamento completo artigo × infração incorporado ao guia.</div>
-        <div class="pend-dest">→ Concluída em 07/05/2026</div>
-      </div>
-      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
-    </div>
-
-    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
-      <div class="pend-num" style="color:var(--greenL)">4</div>
-      <div>
-        <div class="pend-desc"><strong>✔ RESOLVIDA — Lei 2.254/2017</strong> — texto integral verificado. Não trata de horário de bares; altera penalidades do art. 62 da Lei 1.415/1993. Horário de funcionamento consta do alvará individual (art. 37 da Lei 1.415/1993).</div>
-        <div class="pend-dest">→ Concluída em 07/05/2026</div>
-      </div>
-      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
-    </div>
-
-    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
-      <div class="pend-num" style="color:var(--greenL)">5</div>
-      <div>
-        <div class="pend-desc"><strong>✔ RESOLVIDA — Convênio GSSP/ATP-41/2025 + Plano de Trabalho</strong> — texto integral do 1º Termo Aditivo e Plano de Trabalho recebidos (SEI 057.00111358/2026-31). Efetivo: 1 Oficial + 3 Praças, 8h/dia, 30 dias/mês. Objeto: arts. 32, 37 e 44–57 da Lei 1.415/1993.</div>
-        <div class="pend-dest">→ Concluída em 07/05/2026</div>
-      </div>
-      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
-    </div>
-
-    <div class="pend-item">
-      <div class="pend-num">6</div>
-      <div>
-        <div class="pend-desc"><strong>Formalização de contato operacional com o GIAF</strong> — Coordenador Eneas Pinheiro Neto. Agendar reunião para definir protocolo de operações conjuntas e obter talonário de auto de infração.</div>
-        <div class="pend-dest">→ Dep. de Fiscalização / Prefeitura</div>
-      </div>
-      <div class="pend-badge alta">OPERACIONAL</div>
-    </div>
-
-    <div class="pend-item">
-      <div class="pend-num">7</div>
-      <div>
-        <div class="pend-desc"><strong>Modelo oficial do auto de infração de posturas</strong> (talonário da Prefeitura de Valparaíso/SP). Necessário antes de qualquer lavratura pela PM em Atividade Delegada.</div>
-        <div class="pend-dest">→ GIAF / Dep. de Fiscalização</div>
-      </div>
-      <div class="pend-badge alta">OPERACIONAL</div>
-    </div>
-
-    <div class="pend-item">
-      <div class="pend-num">8</div>
-      <div>
-        <div class="pend-desc"><strong>Lista de estabelecimentos com notificações ativas do GIAF</strong> — reincidentes já no processo administrativo são alvos prioritários. Estabelecimentos com 4+ notificações estão em fase de pré-interdição.</div>
-        <div class="pend-dest">→ GIAF / Dep. de Fiscalização</div>
-      </div>
-      <div class="pend-badge alta">OPERACIONAL</div>
-    </div>
   </div>
 
   <div id="footer">
