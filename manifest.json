@@ -1,0 +1,26 @@
+{
+  "name": "Guia Operacional PM — Valparaíso/SP",
+  "short_name": "Guia PM",
+  "description": "Guia operacional da 5ª Cia PM / 2º BPM/I — fiscalização de estabelecimentos comerciais em Valparaíso/SP",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#0d1b2a",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

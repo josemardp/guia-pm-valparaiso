@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Operacional v9 — 5ª Cia PM / Valparaíso/SP</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d1b2a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Guia PM v9">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0d1b2a;
+  --navy2:   #162032;
+  --navy3:   #1e2d42;
+  --blue:    #1a4f8a;
+  --blueM:   #2266b0;
+  --blueL:   #4a90d9;
+  --cyan:    #00b4d8;
+  --gold:    #c8a227;
+  --goldL:   #e8c84a;
+  --red:     #c0392b;
+  --redL:    #e74c3c;
+  --green:   #1a7a3a;
+  --greenL:  #27ae60;
+  --amber:   #d4860a;
+  --amberL:  #f0a500;
+  --text:    #d6e4f7;
+  --textM:   #8aadd4;
+  --textD:   #4a6a8a;
+  --border:  #1e3a5f;
+  --glass:   rgba(255,255,255,0.04);
+  --glassH:  rgba(255,255,255,0.07);
+  --shadow:  0 4px 32px rgba(0,0,0,0.5);
+  --radius:  6px;
+  --font-head: 'Rajdhani', sans-serif;
+  --font-body: 'Source Serif 4', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── BACKGROUND TEXTURE ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(26,79,138,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 85% 90%, rgba(0,180,216,0.07) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.01) 40px);
+}
+
+/* ── LAYOUT ── */
+#app { position:relative; z-index:1; display:flex; min-height:100vh; }
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: 280px; min-width: 280px;
+  background: var(--navy2);
+  border-right: 1px solid var(--border);
+  height: 100vh; position: sticky; top: 0;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: width .3s ease, min-width .3s ease;
+}
+#sidebar.collapsed { width: 56px; min-width: 56px; }
+
+.sidebar-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-header .unit {
+  font-family: var(--font-head);
+  font-size: 11px; font-weight: 700; letter-spacing: .2em;
+  color: var(--cyan); text-transform: uppercase;
+  white-space: nowrap; overflow: hidden;
+}
+.sidebar-header .title {
+  font-family: var(--font-head);
+  font-size: 15px; font-weight: 700; color: var(--text);
+  margin-top: 4px; white-space: nowrap; overflow: hidden;
+}
+#sidebar.collapsed .sidebar-header .unit,
+#sidebar.collapsed .sidebar-header .title { opacity: 0; }
+
+#sidebar-toggle {
+  position: absolute; top: 18px; right: -14px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy3); border: 1px solid var(--border);
+  color: var(--textM); cursor: pointer; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; transition: background .2s;
+}
+#sidebar-toggle:hover { background: var(--blue); color: #fff; }
+
+.sidebar-search {
+  padding: 12px 12px 8px;
+  flex-shrink: 0;
+}
+.sidebar-search input {
+  width: 100%; padding: 7px 10px;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-family: var(--font-mono); font-size: 12px;
+  outline: none; transition: border-color .2s;
+}
+.sidebar-search input:focus { border-color: var(--cyan); }
+.sidebar-search input::placeholder { color: var(--textD); }
+#sidebar.collapsed .sidebar-search { display: none; }
+
+.nav-list {
+  flex: 1; overflow-y: auto; padding: 8px 0;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.nav-section { margin-bottom: 2px; }
+
+.nav-h1 {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 14px; cursor: pointer;
+  font-family: var(--font-head); font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--textM);
+  border-left: 3px solid transparent;
+  transition: all .15s; white-space: nowrap; overflow: hidden;
+  user-select: none;
+}
+.nav-h1:hover { background: var(--glassH); color: var(--text); }
+.nav-h1.active { border-left-color: var(--cyan); color: var(--cyan); background: var(--glass); }
+.nav-h1 .num {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--navy3); border: 1px solid var(--border);
+  border-radius: 3px; padding: 1px 5px; flex-shrink: 0;
+  color: var(--textM); min-width: 22px; text-align: center;
+}
+.nav-h1.active .num { background: var(--blue); border-color: var(--blueM); color: #fff; }
+
+.nav-h2-list { display: none; }
+.nav-h2-list.open { display: block; }
+.nav-h2 {
+  display: block; padding: 5px 14px 5px 36px;
+  font-family: var(--font-body); font-size: 12px; color: var(--textD);
+  cursor: pointer; border-left: 3px solid transparent;
+  transition: all .15s; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; line-height: 1.4;
+}
+.nav-h2:hover { color: var(--textM); background: var(--glass); }
+.nav-h2.active { color: var(--blueL); border-left-color: var(--blueL); }
+
+#sidebar.collapsed .nav-h1 span,
+#sidebar.collapsed .nav-h2-list { display: none; }
+
+/* ── MAIN ── */
+#main {
+  flex: 1; overflow-y: auto; padding: 48px 56px 96px;
+  max-width: 900px;
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 40px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  gap: 16px; flex-wrap: wrap;
+}
+.top-title {
+  font-family: var(--font-head); font-size: 28px; font-weight: 700;
+  color: var(--text); line-height: 1.1; letter-spacing: .02em;
+}
+.top-title span { color: var(--cyan); }
+.top-meta {
+  font-family: var(--font-mono); font-size: 11px; color: var(--textD);
+  margin-top: 4px;
+}
+.top-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn {
+  padding: 7px 14px; border-radius: var(--radius);
+  font-family: var(--font-head); font-size: 13px; font-weight: 600;
+  letter-spacing: .05em; cursor: pointer; border: 1px solid var(--border);
+  background: var(--glass); color: var(--textM); transition: all .2s;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--glassH); color: var(--text); border-color: var(--blueM); }
+.btn.primary { background: var(--blue); border-color: var(--blueM); color: #fff; }
+.btn.primary:hover { background: var(--blueM); }
+
+/* ── SECTION ── */
+.section { display: none; animation: fadeIn .25s ease; }
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TYPOGRAPHY ── */
+.sec-title {
+  font-family: var(--font-head); font-size: 22px; font-weight: 700;
+  letter-spacing: .04em; color: var(--text);
+  padding-bottom: 10px; margin-bottom: 20px;
+  border-bottom: 2px solid var(--blue);
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-num {
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--blue); color: #fff;
+  border-radius: 4px; padding: 2px 8px; flex-shrink: 0;
+}
+
+.subsec {
+  margin-bottom: 28px; scroll-margin-top: 20px;
+}
+.subsec-title {
+  font-family: var(--font-head); font-size: 16px; font-weight: 600;
+  color: var(--blueL); letter-spacing: .04em;
+  margin-bottom: 12px; padding-left: 10px;
+  border-left: 3px solid var(--blueM);
+}
+
+p { margin-bottom: 12px; color: var(--text); font-size: 15px; }
+
+/* ── STATUS BADGES ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 20px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  margin-bottom: 10px;
+}
+.badge-ok  { background: rgba(26,122,58,.2); border:1px solid rgba(39,174,96,.4); color: #6ee09a; }
+.badge-warn{ background: rgba(212,134,10,.18); border:1px solid rgba(240,165,0,.4); color: #ffc947; }
+.badge-info{ background: rgba(26,79,138,.3); border:1px solid rgba(74,144,217,.4); color: var(--blueL); }
+.badge-red { background: rgba(192,57,43,.2); border:1px solid rgba(231,76,60,.4); color: #ff8070; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-radius: var(--radius); padding: 14px 16px;
+  margin-bottom: 14px; border-left: 4px solid;
+  font-size: 14px; line-height: 1.65;
+}
+.callout-ok     { background: rgba(26,122,58,.12); border-color: var(--greenL); }
+.callout-warn   { background: rgba(212,134,10,.12); border-color: var(--amberL); }
+.callout-danger { background: rgba(192,57,43,.15); border-color: var(--redL); }
+.callout-info   { background: rgba(26,79,138,.18); border-color: var(--blueL); }
+.callout strong { font-family: var(--font-head); font-weight: 700; letter-spacing: .03em; }
+.callout-ok strong     { color: #6ee09a; }
+.callout-warn strong   { color: #ffc947; }
+.callout-danger strong { color: #ff8070; }
+.callout-info strong   { color: var(--blueL); }
+
+/* ── LEGAL BASE ── */
+.legal-base {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: rgba(0,180,216,.06); border: 1px solid rgba(0,180,216,.2);
+  border-radius: var(--radius); padding: 8px 12px;
+  margin: 10px 0 16px; font-size: 13px; color: var(--textM);
+  font-family: var(--font-mono); line-height: 1.5;
+}
+.legal-base::before {
+  content: '§'; color: var(--cyan); font-size: 16px; flex-shrink: 0; margin-top: -1px;
+}
+
+/* ── BULLET LISTS ── */
+ul.doc-list { list-style: none; margin: 8px 0 14px; padding: 0; }
+ul.doc-list li {
+  position: relative; padding: 4px 0 4px 20px;
+  font-size: 15px; color: var(--text); line-height: 1.6;
+  border-bottom: 1px solid rgba(255,255,255,.03);
+}
+ul.doc-list li::before {
+  content: '▸'; position: absolute; left: 0; top: 5px;
+  color: var(--blueL); font-size: 11px;
+}
+ul.doc-list li strong { color: var(--goldL); font-family: var(--font-head); font-weight: 600; }
+ul.doc-list li em { color: var(--textM); font-style: italic; }
+
+/* Sub-bullets */
+ul.doc-list ul { margin: 4px 0 0 16px; }
+ul.doc-list ul li::before { content: '◦'; color: var(--textD); }
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); }
+table.doc-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13.5px; background: var(--navy2);
+}
+table.doc-table th {
+  background: var(--blue); color: #fff;
+  font-family: var(--font-head); font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; font-size: 12px;
+  padding: 10px 12px; text-align: left; border: 1px solid var(--blueM);
+}
+table.doc-table td {
+  padding: 9px 12px; border: 1px solid var(--border);
+  color: var(--text); vertical-align: top; line-height: 1.5;
+}
+table.doc-table tr:nth-child(even) td { background: var(--glass); }
+table.doc-table tr:hover td { background: var(--glassH); }
+table.doc-table td strong { color: var(--goldL); font-family: var(--font-head); font-weight: 600; }
+.td-red { color: #ff8070 !important; font-weight: 700; }
+.td-ok  { color: #6ee09a !important; }
+.td-warn{ color: #ffc947 !important; }
+
+/* ── POP CARDS ── */
+.pop-card {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: 8px; margin-bottom: 20px; overflow: hidden;
+}
+.pop-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; background: var(--navy3);
+  border-bottom: 1px solid var(--border); cursor: pointer;
+  user-select: none; transition: background .15s;
+}
+.pop-header:hover { background: var(--glass); }
+.pop-num {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--blue); color: #fff; border-radius: 3px;
+  padding: 2px 7px; flex-shrink: 0;
+}
+.pop-title {
+  font-family: var(--font-head); font-weight: 700; font-size: 15px;
+  color: var(--text); flex: 1; letter-spacing: .04em;
+}
+.pop-chevron {
+  color: var(--textD); font-size: 12px;
+  transition: transform .25s;
+}
+.pop-card.open .pop-chevron { transform: rotate(90deg); }
+.pop-body { display: none; padding: 16px; }
+.pop-card.open .pop-body { display: block; }
+
+.scenario {
+  background: rgba(26,79,138,.12); border: 1px solid rgba(74,144,217,.25);
+  border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px;
+}
+.scenario-label {
+  font-family: var(--font-head); font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; color: var(--cyan); margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+/* ── JURISPRUDÊNCIA ── */
+.juris-card {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px; margin-bottom: 16px;
+  transition: border-color .2s;
+}
+.juris-card:hover { border-color: var(--blueM); }
+.juris-title {
+  font-family: var(--font-head); font-size: 14px; font-weight: 700;
+  color: var(--blueL); margin-bottom: 10px; letter-spacing: .04em;
+}
+.juris-ementa {
+  font-style: italic; color: var(--textM); font-size: 14px;
+  line-height: 1.6; border-left: 3px solid var(--border);
+  padding-left: 12px; margin-bottom: 8px;
+}
+.juris-fonte {
+  font-family: var(--font-mono); font-size: 11px; color: var(--textD);
+}
+
+/* ── SÍNTESE COLS ── */
+.sintese-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; margin-bottom: 16px;
+}
+.sintese-col { border-radius: 8px; overflow: hidden; }
+.sintese-head {
+  padding: 10px 12px; font-family: var(--font-head);
+  font-size: 13px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; text-align: center;
+}
+.sintese-head.azul  { background: #1e5799; color: #fff; }
+.sintese-head.verde { background: #1a5a2e; color: #fff; }
+.sintese-head.verm  { background: #7b1010; color: #fff; }
+.sintese-item {
+  padding: 8px 10px; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  background: var(--navy2); color: var(--text); line-height: 1.45;
+}
+.sintese-item:last-child { border-bottom: none; }
+.sintese-col.azul  .sintese-item:nth-child(odd)  { background: rgba(26,79,138,.12); }
+.sintese-col.verde .sintese-item:nth-child(odd)  { background: rgba(26,90,46,.12); }
+.sintese-col.verm  .sintese-item:nth-child(odd)  { background: rgba(123,16,16,.12); }
+
+/* ── PENDÊNCIAS ── */
+.pend-item {
+  display: grid; grid-template-columns: 36px 1fr auto;
+  gap: 12px; align-items: start;
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px 14px; margin-bottom: 8px;
+  transition: border-color .2s;
+}
+.pend-item:hover { border-color: var(--blueM); }
+.pend-num {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+  color: var(--textD); text-align: center; padding-top: 2px;
+}
+.pend-desc { font-size: 14px; line-height: 1.5; }
+.pend-dest { font-family: var(--font-mono); font-size: 11px; color: var(--textD); margin-top: 4px; }
+.pend-badge {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.pend-badge.crit  { background: rgba(192,57,43,.25); color: #ff8070; border: 1px solid rgba(231,76,60,.4); }
+.pend-badge.alta  { background: rgba(212,134,10,.2); color: #ffc947; border: 1px solid rgba(240,165,0,.4); }
+.pend-badge.media { background: rgba(26,79,138,.25); color: var(--blueL); border: 1px solid var(--border); }
+
+/* ── NOTA METODOLÓGICA ── */
+.nota-metodologica {
+  background: linear-gradient(135deg, rgba(26,79,138,.15), rgba(0,180,216,.06));
+  border: 1px solid rgba(0,180,216,.25); border-radius: 8px;
+  padding: 16px 18px; margin-bottom: 28px;
+  font-size: 14px; line-height: 1.65; color: var(--textM);
+}
+.nota-metodologica strong { color: var(--cyan); font-family: var(--font-head); font-weight: 700; }
+
+/* ── SEARCH HIGHLIGHT ── */
+mark { background: rgba(200,162,39,.35); color: var(--goldL); border-radius: 2px; }
+
+/* ── ANOTAÇÕES ── */
+#notes-panel {
+  position: fixed; right: 0; top: 0; bottom: 0; width: 320px;
+  background: var(--navy2); border-left: 1px solid var(--border);
+  transform: translateX(100%); transition: transform .3s ease;
+  z-index: 100; display: flex; flex-direction: column;
+}
+#notes-panel.open { transform: translateX(0); }
+.notes-header {
+  padding: 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.notes-header h3 {
+  font-family: var(--font-head); font-size: 16px; font-weight: 700;
+  color: var(--text); letter-spacing: .06em;
+}
+#notes-close { background: none; border: none; color: var(--textM); cursor: pointer; font-size: 18px; }
+#notes-close:hover { color: var(--text); }
+#notes-area {
+  flex: 1; padding: 16px; overflow-y: auto;
+}
+#notes-input {
+  width: 100%; background: var(--navy3); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text); padding: 10px 12px;
+  font-family: var(--font-body); font-size: 14px; line-height: 1.5;
+  resize: none; outline: none; min-height: 80px;
+  transition: border-color .2s;
+}
+#notes-input:focus { border-color: var(--cyan); }
+.notes-save-row { display: flex; gap: 8px; margin-top: 8px; }
+.note-entry {
+  background: var(--navy3); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px;
+}
+.note-entry .note-sec {
+  font-family: var(--font-mono); font-size: 10px; color: var(--cyan);
+  margin-bottom: 4px; text-transform: uppercase; letter-spacing: .08em;
+}
+.note-entry .note-text { font-size: 13px; color: var(--textM); line-height: 1.5; }
+.note-entry .note-del {
+  background: none; border: none; color: var(--textD); cursor: pointer;
+  float: right; font-size: 13px; margin-left: 8px;
+}
+.note-entry .note-del:hover { color: var(--redL); }
+#notes-empty { color: var(--textD); font-size: 13px; font-style: italic; margin-top: 8px; }
+
+/* ── PROGRESS ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--blueL));
+  z-index: 1000; transition: width .3s;
+}
+
+/* ── FOOTER ── */
+#footer {
+  border-top: 1px solid var(--border); margin-top: 48px; padding-top: 20px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--textD);
+  display: flex; gap: 20px; flex-wrap: wrap; align-items: center;
+}
+#footer span { display: flex; align-items: center; gap: 4px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  #sidebar { width: 240px; min-width: 240px; }
+  #main { padding: 32px 28px 80px; }
+  .sintese-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  #sidebar { display: none; }
+  #main { padding: 24px 18px 72px; }
+}
+
+/* ── PRINT ── */
+@media print {
+  #sidebar, #topbar .top-actions, #notes-panel, #progress-bar { display: none !important; }
+  #main { padding: 0; max-width: 100%; }
+  .section { display: block !important; }
+  .pop-body { display: block !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar" style="width:0%"></div>
+
+<div id="app">
+
+<!-- ══ SIDEBAR ══ -->
+<nav id="sidebar">
+  <button id="sidebar-toggle" title="Recolher menu">◀</button>
+  <div class="sidebar-header">
+    <div class="unit">5ª Cia PM · 2º BPM/I</div>
+    <div class="title">Guia Operacional v4</div>
+  </div>
+  <div class="sidebar-search">
+    <input type="text" id="search-input" placeholder="Buscar no guia…" autocomplete="off">
+  </div>
+  <div class="nav-list" id="nav-list">
+    <!-- Gerado por JS -->
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<main id="main">
+
+  <div id="topbar">
+    <div>
+      <div class="top-title">Guia <span>Operacional</span></div>
+      <div class="top-meta">5ª Cia PM · 2º BPM/I · Valparaíso/SP · Versão 9 · Maio 2026</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="install-btn" style="display:none" onclick="installPWA()">📲 Instalar</button>
+      <button class="btn" onclick="toggleNotes()">📝 Anotações</button>
+      <button class="btn" onclick="window.print()">🖨 Imprimir</button>
+    </div>
+  </div>
+
+  <!-- ══ S0: NOTA METODOLÓGICA ══ -->
+  <div class="section active" id="sec-0" data-title="Início">
+    <div class="sec-title"><span class="sec-num">★</span>Nota de integridade e metodologia</div>
+    <div class="nota-metodologica">
+      <strong>Versão 7 — GUIA OPERACIONAL PLENO:</strong> todos os diplomas municipais relevantes foram recebidos em texto integral e fonte primária oficial. Sem pendências normativas ou operacionais. Corpus jurídico completo. Talonário de auto de infração em mãos. Lista de reincidentes do GIAF obtida. Reunião de formalização com o Coordenador do GIAF (Eneas Pinheiro Neto) realizada. A PM está apta a operar em plena legalidade.
+    </div>
+
+    <div class="callout callout-ok">
+      <strong>✔ DIPLOMAS VERIFICADOS EM FONTE PRIMÁRIA:</strong> Decreto 4.960/2026 (multas), Decreto 4.947/2026 (GIAF), Convênio GSSP/ATP-41/2025 + Plano de Trabalho, Lei 1.415/1993 (texto integral), Lei 2.133/2011 (lei-mãe da GDAD — texto integral), Lei 2.254/2017, Lei 2.401/2021, Decreto 4.827/2025, Lei Orgânica, LC 12/1999, Decreto 4.250/2022 (texto integral verificado — composição nominal da Comissão Paritária confirmada).
+    </div>
+
+    <div class="callout callout-ok">
+      <strong>✔ MAPEAMENTO ARTIGO × MULTA COMPLETO:</strong> Com o texto integral da Lei 1.415/1993 em mãos, cada artigo citado no Decreto 4.960/2026 está agora identificado. O auto de infração pode ser lavrado com fundamentação correta.
+    </div>
+
+    <div class="callout callout-info">
+      <strong>Horário de funcionamento — esclarecimento definitivo:</strong> Não existe lei municipal específica fixando um horário único para bares em Valparaíso/SP. O art. 37 da Lei 1.415/1993 fixa horário geral (abertura 6–9h, fechamento 18–22h nos dias úteis). Horários especiais são autorizados individualmente via alvará. O policial verifica o horário constante no espelho do alvará afixado — esse é o limite legal de cada estabelecimento. A Lei 2.254/2017 trata apenas de multas, não de horário.
+    </div>
+
+    <div style="margin-top:20px">
+      <div class="subsec-title">Legenda de status das normas</div>
+      <ul class="doc-list">
+        <li><span class="badge badge-ok">✔ CONFIRMADO</span> — verificado em fonte primária oficial.</li>
+        <li><span class="badge badge-warn">⚠ A CONFIRMAR</span> — citado em fonte secundária; obter texto oficial antes de usar.</li>
+        <li><span class="badge badge-red">✗ EXCLUÍDO</span> — dado incorreto identificado e removido do guia.</li>
+        <li><span class="badge badge-info">ℹ INFO</span> — informação complementar.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="subsec-title">Como usar este guia</div>
+      <ul class="doc-list">
+        <li>Use o <strong>menu lateral</strong> para navegar por seção.</li>
+        <li>Use a <strong>busca</strong> para localizar termos, artigos ou decretos.</li>
+        <li>Clique nos <strong>cards de POP</strong> para expandir cada procedimento.</li>
+        <li>Use <strong>Anotações</strong> para registrar observações por seção — ficam salvas no navegador.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ S1: BASE NORMATIVA ══ -->
+  <div class="section" id="sec-1" data-title="1. Base normativa">
+    <div class="sec-title"><span class="sec-num">1</span>Base normativa municipal de Valparaíso/SP</div>
+
+    <div class="subsec" id="s1-1">
+      <div class="subsec-title">1.1. Lei Orgânica do Município</div>
+      <div class="badge badge-ok">✔ CONFIRMADO — leismunicipais.com.br</div>
+      <ul class="doc-list">
+        <li><strong>Art. 5º, §1º, IV:</strong> Competência para <em>conceder licença para localização e funcionamento</em> de estabelecimentos industriais, comerciais, prestadores de serviços e quaisquer outros.</li>
+        <li><strong>Art. 5º, §1º, V:</strong> Competência para <em>cassar a licença</em> do estabelecimento que se tornar prejudicial à saúde, higiene, sossego, segurança ou bons costumes, podendo determinar o fechamento.</li>
+      </ul>
+      <div class="legal-base">Lei Orgânica do Município de Valparaíso/SP, art. 5º, §1º, incisos IV e V.</div>
+    </div>
+
+    <div class="subsec" id="s1-2">
+      <div class="subsec-title">1.2. Lei Municipal nº 1.415/1993 — Código de Posturas</div>
+      <div class="badge badge-ok">✔ CONFIRMADO — Decreto 4.573/2024 e 4.960/2026 do portal oficial</div>
+      <p>Ementa verificada: <em>"Dispõe sobre Higiene, Segurança, Bem Estar Coletivo, Horário de Funcionamento de Estabelecimentos."</em> É o Código de Posturas do Município.</p>
+      <ul class="doc-list">
+        <li>Exigência de Alvará de Licença para Localização e Funcionamento para qualquer atividade empresarial.</li>
+        <li>Requisitos de higiene estrutural para bares, lanchonetes e restaurantes.</li>
+        <li>Restrições de zoneamento e distâncias mínimas de escolas.</li>
+        <li>Proibição de emissão irregular de sons e ruídos perturbadores do sossego público.</li>
+        <li>Regras sobre ocupação de calçadas e logradouros públicos (arts. 7º, 8º, 12, 19, 21, 30, 31, 32 — com previsão de remoção compulsória).</li>
+        <li><strong>Art. 37 (verificado):</strong> Horário geral de funcionamento — abertura entre 6h e 9h, fechamento entre 18h e 22h, nos dias úteis. §1º: horário especial permitido (inclusive domingos/feriados) para estabelecimentos de gêneros perecíveis, serviços essenciais, produção em turnos e turismo. §2º: Executivo pode autorizar horário especial para outros estabelecimentos "desde que não causem incômodo à vizinhança." <strong>Não há horário único fixo para bares — o horário consta do alvará individual.</strong></li>
+        <li><strong>Art. 13 (verificado):</strong> Bares e congêneres podem colocar mesas e cadeiras na calçada, desde que autorizados pela Prefeitura. Faixa livre mínima de 1 metro para pedestres.</li>
+        <li><strong>Art. 32 (verificado — base principal para ruído):</strong> É expressamente proibido perturbar o sossego público com ruídos ou sons excessivos. §único: vistoria pode ser solicitada por carta de 60% dos proprietários/ocupantes num raio de 50m do ponto de origem. <strong>Multa: R$ 583,99 (Decreto 4.960/2026).</strong></li>
+        <li><strong>Art. 33 (verificado):</strong> Propaganda sonora (amplificadores, alto-falantes fixos ou móveis) sujeita a licença prévia. Horário permitido: 8h às 18h. Proibida próximo a hospitais, escolas e bibliotecas.</li>
+        <li><strong>Art. 62:</strong> Infrações ensejam penalidades — alterado pela Lei nº 2.254/2017 para incluir expressamente "Multa" como penalidade. Regulamentado pelo Decreto 4.960/2026.</li>
+      </ul>
+      <ul class="doc-list">
+        <li><strong>LC Municipal nº 12/1999 (Código Tributário Municipal), art. 116:</strong> Sujeita atividades comerciais ao poder de polícia administrativa. <em>§4º:</em> taxa de Licença de Localização e Funcionamento. <em>Art. 142, II:</em> penalidade por atividade sem licença. — Confirmado pela Notificação do GIAF de 06/05/2026.</li>
+      </ul>
+      <div class="callout callout-ok">
+        <strong>✔ Texto integral verificado — Lei 1.415/1993 (PDF original de 1993, assinado).</strong> Mapeamento artigo × infração completo — ver tabela na seção 1.3-A. Art. 37: horário geral de abertura 6–9h e fechamento 18–22h nos dias úteis; horários especiais por alvará individual. Art. 32: perturbação do sossego com ruídos — base principal para bares. Art. 13: mesas em calçadas mediante autorização, faixa mínima de 1m livre.
+      </div>
+    </div>
+
+    <div class="subsec" id="s1-3a">
+      <div class="subsec-title">1.3-A. Decreto Municipal nº 4.960, de 26 de janeiro de 2026 — Penalidades vigentes</div>
+      <div class="badge badge-ok">✔ TEXTO INTEGRAL VERIFICADO — PDF oficial assinado eletronicamente (SEI nº 0405698)</div>
+      <ul class="doc-list">
+        <li><strong>Data:</strong> 26 de janeiro de 2026. Assinado pelo Prefeito Carlos Alexandre Pereira e pela Secretária de Administração Aline Araújo Lima.</li>
+        <li><strong>Objeto:</strong> Regulamenta penalidades civis do art. 62 da Lei nº 1.415/1993. É o decreto <strong>atualmente em vigor</strong>.</li>
+        <li><strong>Cadeia de revogações:</strong> Decreto 4.573/2024 → Decreto 4.618/2025 → <strong>Decreto 4.960/2026 (vigente)</strong>. O decreto revogado pelo 4.960 é o nº 4.618/2025, não o 4.573/2024 diretamente.</li>
+        <li><strong>Correção aplicada:</strong> IPCA/IBGE de <strong>4,26%</strong> sobre os valores anteriores.</li>
+        <li><strong>Art. 2º:</strong> multas aplicadas pelos <strong>Agentes Fiscais do Município</strong> — recolhidas ao Tesouro Municipal por Guias.</li>
+        <li><strong>Art. 2º, §1º:</strong> reincidência — valores aplicados <strong>em dobro</strong>.</li>
+        <li><strong>Art. 2º, §2º:</strong> recurso ao <strong>Chefe do Setor Tributário</strong> → instância superior.</li>
+        <li><strong>Art. 3º:</strong> não pagamento → cobrança judicial após esgotada a instância administrativa.</li>
+        <li><strong>Autenticidade:</strong> verificável em cidades.sei.sp.gov.br/aracatuba — código <strong>0405698</strong> / CRC <strong>6703759A</strong>.</li>
+      </ul>
+      <p style="font-size:13px;color:var(--textM);margin-bottom:8px"><strong>Tabela de multas vigentes — valores definitivos (Decreto 4.960/2026):</strong></p>
+      <div class="table-wrap">
+        <table class="doc-table">
+          <thead><tr><th>Artigo — conteúdo verificado na Lei 1.415/1993</th><th>Multa vigente (R$)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Art. 3º</strong> — Limpeza do passeio fronteiriço a edificações (responsabilidade do ocupante); proibido varrer lixo para bocas de lobo.</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 4º</strong> — Proibido danificar, assorear ou obstruir cursos d'água (rios, córregos, canais, valetas, sarjetas) com lixo ou detritos.</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 5º, inciso I</strong> — Proibido deixar escoar águas servidas das edificações para logradouro público.</td><td class="td-ok"><strong>R$ 145,98</strong></td></tr>
+            <tr><td><strong>Art. 5º, inciso II</strong> — Proibido transportar, sem precauções, materiais que comprometam o asseio das vias públicas.</td><td class="td-ok"><strong>R$ 145,98</strong></td></tr>
+            <tr><td><strong>Art. 5º, inciso III</strong> — Proibido atirar ou despejar varredura, papéis ou detritos em logradouros públicos.</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 6º</strong> — Execução de argamassa em logradouro público sem caixa estanque (contato com pavimento).</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 7º, §único</strong> — Veículo abandonado em via pública por mais de 45 dias (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 8º</strong> — Embaraçar ou impedir o livre trânsito de pedestres ou veículos em ruas, praças, passeios e caminhos públicos (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 10</strong> — Danificar ou retirar sinais de trânsito colocados em vias, praças, estradas ou caminhos públicos.</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 12</strong> — Embaraçar o trânsito de pedestres: volumes de grande porte nos passeios; veículos nos passeios; materiais de construção fora de tapumes; suportes de lixo obstruindo circulação (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 19</strong> — Proibições em estradas municipais rurais: obstruir trânsito, danificar leito/pontes/bueiros, abrir valetas, impedir escoamento, colocar obstáculos, porteiras, mata-burros (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 21</strong> — Proibido erguer obstáculos (cercas, postes, árvores, tapumes) dentro da faixa de domínio de estradas municipais (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+            <tr><td><strong>Art. 30</strong> — Instalação de anúncios ou letreiros luminosos intermitentes ou equipamentos amplificadores de som em zonas residenciais sem autorização (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 31</strong> — Colocação de anúncios ou cartazes que provoquem aglomerações prejudiciais ao trânsito, reduzam visibilidade ou desfigurem bens públicos (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 194,66</strong></td></tr>
+            <tr><td><strong>Art. 32</strong> — <strong>PERTURBAR O SOSSEGO PÚBLICO COM RUÍDOS OU SONS EXCESSIVOS.</strong> Base principal para fiscalização de bares. §único: vistoria formal pode ser solicitada à Prefeitura por carta de 60% dos moradores num raio de 50m — <em>esse requisito é apenas para pedido de vistoria formal, NÃO é condição para a PM agir com base no art. 42 da LCP</em> (+ remoção compulsória).</td><td class="td-ok"><strong>R$ 583,99</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout callout-ok">
+        <strong>✔ Mapeamento completo:</strong> Todos os artigos estão identificados com seus conteúdos. O auto de infração pode ser lavrado com fundamentação correta. Reincidência dobra o valor — lavrar sempre com o histórico de notificações em mãos.
+      </div>
+      <div class="legal-base">Decreto Municipal nº 4.960/2026, arts. 1º–4º; Lei Municipal nº 1.415/1993, art. 62. Processo SEI nº 3556305.406.00001023/2026-76.</div>
+    </div>
+
+    <div class="subsec" id="s1-3b">
+      <div class="subsec-title">1.3-B. Decreto Municipal nº 4.947, de 19 de janeiro de 2026 — Criação do GIAF</div>
+      <div class="badge badge-ok">✔ TEXTO INTEGRAL VERIFICADO — PDF oficial assinado pela Prefeitura de Valparaíso/SP</div>
+      <p><strong>Objeto:</strong> Institui o <strong>Grupo Integrado de Ações Fiscalizatórias – GIAF</strong> com a finalidade de <em>"integrar, coordenar, planejar e executar ações de fiscalização administrativa, de forma preventiva, ostensiva, educativa e repressiva, no exercício do poder de polícia municipal."</em></p>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Composição do GIAF (art. 2º):</strong></p>
+      <ul class="doc-list">
+        <li>I – Vigilância Sanitária; II – Fiscalização de Comércio; III – Fiscalização de Posturas Municipais; IV – Fiscalização Tributária; V – Fiscalização de Serviços; VI – Meio Ambiente; VII – PROCON Municipal; VIII – outros órgãos da Administração Direta convocados.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <strong>Art. 2º, §único — Relação PM/GIAF (texto literal verificado):</strong><br>
+        <em>"O GIAF poderá atuar em cooperação institucional com a Polícia Militar e a Polícia Civil, exclusivamente para fins de apoio, segurança das equipes e garantia da ordem pública, respeitadas as competências legais de cada órgão."</em><br><br>
+        Implicação operacional direta: o papel da PM junto ao GIAF é <strong>apoio e segurança</strong> — não substituição. A PM não exerce o poder de polícia administrativa do GIAF; ela garante condições para que o GIAF o exerça.
+      </div>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Finalidades do GIAF (art. 3º):</strong></p>
+      <ul class="doc-list">
+        <li>I – prevenir e coibir a perturbação do sossego público;</li>
+        <li>II – fiscalizar o cumprimento das normas ambientais, sanitárias e de saúde pública;</li>
+        <li>III – assegurar o respeito às posturas municipais, licenças, alvarás e autorizações;</li>
+        <li>IV – combater o funcionamento irregular de atividades econômicas;</li>
+        <li>V – proteger o interesse coletivo, a segurança, a saúde e o bem-estar da população.</li>
+      </ul>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Competências do GIAF (art. 5º):</strong></p>
+      <ul class="doc-list">
+        <li>Integrar e otimizar as ações de fiscalização da Administração Direta Municipal.</li>
+        <li>Planejar e executar operações conjuntas.</li>
+        <li><strong>Centralizar denúncias e demandas externas</strong> relacionadas à fiscalização — canal único para comunicar ocorrências.</li>
+        <li>Padronizar procedimentos fiscalizatórios.</li>
+        <li>Elaborar relatórios das ações realizadas.</li>
+      </ul>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Medidas que o GIAF pode adotar (art. 6º):</strong></p>
+      <ul class="doc-list">
+        <li>I – notificações e autos de infração;</li>
+        <li>II – advertência e multa administrativa;</li>
+        <li>III – <strong>interdição parcial ou total;</strong></li>
+        <li>IV – apreensão, retenção ou inutilização de bens;</li>
+        <li>V – suspensão de atividades;</li>
+        <li>VI – cassação ou cancelamento de licenças e alvarás <em>(o GIAF instrui e propõe; o ato formal de cassação é privativo do Prefeito, em processo administrativo com contraditório — Lei Orgânica art. 5º, §1º, V)</em>.</li>
+      </ul>
+      <div class="callout callout-warn">
+        <strong>Art. 6º, §único — limite importante (texto literal):</strong> <em>"As medidas deverão ser motivadas, proporcionais e formalizadas, assegurado o contraditório e a ampla defesa."</em> — Mesmo o GIAF não age de forma sumária. Toda medida exige motivação e formalização.
+      </div>
+
+      <div class="callout callout-ok">
+        <strong>Art. 7º — participação no GIAF não gera gratificação:</strong> Os agentes do GIAF são servidores municipais em exercício normal de suas funções — não estão em regime de Atividade Delegada remunerada. Não confundir com o regime do policial em A.D.
+      </div>
+
+      <div class="callout callout-ok">
+        <strong>Contatos identificados na Notificação de 06/05/2026:</strong><br>
+        Eneas Pinheiro Neto — Coordenador do GIAF, Fiscal de Serviços<br>
+        Oswaldo Stefanone Jr — Membro do GIAF, Fiscal de Serviços
+      </div>
+      <div class="legal-base">Decreto Municipal nº 4.947/2026, arts. 1º–9º. Publicado em 19/01/2026. Assinado por Carlos Alexandre Pereira, Prefeito, e Aline Araújo Lima, Secretária de Administração.</div>
+    </div>
+
+    <div class="subsec" id="s1-4">
+      <div class="subsec-title">1.4. Lei Ordinária nº 2.254, de 10 de abril de 2017</div>
+      <div class="badge badge-warn">⚠ A CONFIRMAR — citada com URL da Câmara Municipal</div>
+      <ul class="doc-list">
+        <li><strong>Objeto informado:</strong> Alteração do art. 62 da Lei 1.415/1993 — fixa horário-limite de funcionamento para estabelecimentos de entretenimento noturno.</li>
+        <li><strong>Relevância crítica:</strong> É o diploma que define o horário exato. Sem ele, o policial não tem base específica para o fechamento por horário.</li>
+      </ul>
+      <div class="callout callout-ok">
+        <strong>✔ Texto integral verificado (PDF oficial de 2017).</strong> A Lei 2.254/2017 <strong>não trata de horário de bares</strong>. Altera exclusivamente o caput do art. 62 e o inciso I da Lei 1.415/1993, explicitando "Multa" como penalidade — habilitando juridicamente a cobrança de multa pelos decretos regulamentadores (4.573/2024 → 4.618/2025 → 4.960/2026). O horário de funcionamento de cada estabelecimento consta do alvará individual, com base no art. 37 da Lei 1.415/1993.
+      </div>
+    </div>
+
+    <div class="subsec" id="s1-5">
+      <div class="subsec-title">1.5. Lei Municipal nº 2.133, de 28 de outubro de 2011 e Decreto nº 4.250/2022</div>
+      <div class="badge badge-ok">✔ TEXTO INTEGRAL VERIFICADO — Lei 2.133/2011 e Decreto 4.250/2022</div>
+
+      <p><strong>Lei nº 2.133/2011 — a lei-mãe da Atividade Delegada em Valparaíso/SP.</strong> Sancionada pelo Prefeito Dr. Marcos Yukio Higuchi. Cria toda a estrutura jurídica municipal que sustenta o convênio vigente (GSSP/ATP-41/2025).</p>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Artigos essenciais verificados:</strong></p>
+      <ul class="doc-list">
+        <li><strong>Art. 1º:</strong> Autoriza o Executivo a celebrar convênio com a SSP/SP para o <em>"Programa de Combate ao Comércio Irregular e Ilegal, e ao Descumprimento das Posturas Municipais"</em> — este é o nome original do programa de Atividade Delegada em Valparaíso/SP.</li>
+        <li><strong>Art. 3º:</strong> Cria expressamente a <strong>Gratificação por Desempenho de Atividade Delegada (GDAD)</strong> para integrantes da PM e Polícia Civil.</li>
+        <li><strong>Art. 4º — Valores da GDAD:</strong>
+          <ul>
+            <li>Coronel, Ten-Coronel, Major, Capitão, 1º Ten, 2º Ten e Delegado: <strong>1,3 UFESP/hora trabalhada.</strong></li>
+            <li>Subtenente, 1º Sgt, 2º Sgt, 3º Sgt, Cabo, Soldado e Policial Civil não-Delegado: <strong>0,92 UFESP/hora trabalhada.</strong></li>
+            <li>§único: pagamento incompatível com outras vantagens da mesma natureza.</li>
+          </ul>
+        </li>
+        <li><strong>Art. 5º:</strong> Cada partícipe responde pelos danos causados por seus agentes a terceiros — confirma a responsabilidade civil objetiva do Estado (CF art. 37, §6º).</li>
+        <li><strong>Art. 6º:</strong> Prazo de convênio: 3 anos, prorrogável até 5 anos — estrutura mantida no convênio GSSP/ATP-41/2025.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <strong>Consistência confirmada:</strong> Os valores da GDAD da Lei 2.133/2011 (1,3 e 0,92 UFESP/hora) são exatamente os mesmos do Plano de Trabalho original do convênio GSSP/ATP-41/2025 — confirmação perfeita de continuidade normativa entre a lei municipal de 2011 e o convênio vigente em 2025/2026.
+      </div>
+
+      <p style="font-size:13px;color:var(--textM);margin-bottom:6px"><strong>Decreto nº 4.250/2022 — Comissão Paritária de Controle:</strong></p>
+      <ul class="doc-list">
+        <li>Institui e nomeia a Comissão Paritária de Controle do convênio, conforme exigência do art. 5º da Lei 2.133/2011 e Cláusula 4ª do Convênio.</li>
+        <li><strong>Composição verificada (texto integral do Decreto 4.250/2022):</strong>
+          <ul>
+            <li><em>Município:</em> Luis Augusto de Oliveira Monteiro (Presidente — voto de qualidade em empate) e Luiz Antonio Vicioli Junior.</li>
+            <li><em>PM:</em> Maj PM Adriano Jesus de Andrade (Coordenador Operacional 2º BPM/I) e <strong>Cap PM Josemar de Paula — Comandante da 5ª Cia PM</strong> (titular atual).</li>
+          </ul>
+        </li>
+        <li><strong>Atribuições da Comissão (art. 3º):</strong> I — elaborar o plano de trabalho; II — acompanhar a execução do convênio; III — avaliar efetivo necessário e encaminhar ao Cmt 2º BPM/I; IV — conferir horas e atestar montante a ser transferido pela Prefeitura; V — propor adequações.</li>
+        <li><strong>Prazo:</strong> indeterminado, em harmonia com o Chefe do Executivo Municipal (art. 4º).</li>
+      </ul>
+
+      <div class="callout callout-ok">
+        <strong>Relevância de comando:</strong> O Cmt da 5ª Cia PM integra formalmente a Comissão Paritária — com poder e responsabilidade diretos sobre o plano de trabalho e o que a tropa pode lavrar na rua. As reuniões da Comissão são o canal formal para propor ampliação ou ajuste do objeto do convênio.
+      </div>
+      <div class="legal-base">Lei Municipal nº 2.133, de 28/10/2011; Decreto Municipal nº 4.250/2022; Convênio GSSP/ATP-41/2025.</div>
+    </div>
+
+    <div class="subsec" id="s1-6">
+      <div class="subsec-title">1.6. Normas federais e estaduais integradas</div>
+      <div class="badge badge-ok">✔ TODAS VERIFICADAS</div>
+      <ul class="doc-list">
+        <li><strong>LCP art. 42 (DL 3.688/1941):</strong> Perturbação do sossego — gritaria (I), profissão ruidosa (II), instrumentos sonoros (III), barulho de animal (IV). Prisão simples 15 dias–3 meses ou multa. Dispensa medição em dB.</li>
+        <li><strong>LCP art. 62:</strong> Embriaguez com escândalo ou risco à segurança.</li>
+        <li><strong>CP art. 129</strong> (lesão corporal), <strong>137</strong> (rixa), <strong>147</strong> (ameaça), <strong>330</strong> (desobediência).</li>
+        <li><strong>ECA arts. 81 e 243:</strong> Venda de bebida alcoólica a menor — crime, 2 a 4 anos de detenção.</li>
+        <li><strong>Lei 10.826/2003, art. 14:</strong> Porte ilegal de arma — flagrante imediato.</li>
+        <li><strong>Resolução CONAMA 001/1990:</strong> Padrões de ruído em atividades comerciais; remete à ABNT NBR 10.151.</li>
+        <li><strong>ABNT NBR 10.151/2019:</strong> Metodologia de medição. Limites variam por zona e período — não há limite único universal. Não usar valores de São Paulo Capital.</li>
+        <li><strong>Lei 9.605/1998, art. 54:</strong> Crime ambiental por poluição causadora de dano à saúde humana.</li>
+        <li><strong>Lei Estadual 10.291/1968 + LC 1.372/2022:</strong> Regime jurídico da Atividade Delegada no Estado de SP.</li>
+        <li><strong>LC Estadual 893/2001 (RDPM):</strong> Disciplina aplicável ao PM em Atividade Delegada.</li>
+        <li><strong>CF art. 144, §5º:</strong> Competência constitucional da PM para preservação da ordem pública.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ S2: PODER DE POLÍCIA ══ -->
+  <div class="section" id="sec-2" data-title="2. Poder de polícia">
+    <div class="sec-title"><span class="sec-num">2</span>Poder de polícia administrativa: competências e limites</div>
+
+    <div class="subsec" id="s2-1">
+      <div class="subsec-title">2.1. Competência originária — fiscal municipal e GIAF</div>
+      <p>A fiscalização de posturas e alvarás é competência primária do Município. Os Agentes Fiscais e os integrantes do GIAF têm poder de polícia administrativa: verificam, notificam, lavram autos, interditam e propõem cassação.</p>
+      <div class="legal-base">CTN art. 78; CF art. 30, I e VIII; Decreto 4.573/2024 art. 2º; Decreto 4.947/2026, art. 6º.</div>
+    </div>
+
+    <div class="subsec" id="s2-2">
+      <div class="subsec-title">2.2. A Atividade Delegada e a dupla qualificação do policial</div>
+      <p>Investido no braçal da Atividade Delegada e atuando dentro do plano de trabalho pactuado, o policial militar cumula duas qualificações simultâneas:</p>
+      <ul class="doc-list">
+        <li><strong>Polícia de Segurança (sempre):</strong> preservação da ordem pública, flagrante de crime e contravenção, uso progressivo da força — competência constitucional permanente (CF art. 144, §5º).</li>
+        <li><strong>Agente fiscal municipal (via delegação):</strong> fiscalização de posturas, solicitação de alvará, lavratura de auto de infração municipal, remoção compulsória de mobiliário, fechamento por infração de horário — competência derivada do convênio e do plano de trabalho.</li>
+      </ul>
+      <div class="callout callout-warn">
+        <strong>Condição obrigatória:</strong> A dupla qualificação só opera se o convênio estiver vigente, se o plano de trabalho incluir expressamente a atribuição exercida, e se o policial estiver capacitado para usar o talonário municipal. Sem essas condições, o auto de infração é nulo.
+      </div>
+      <div class="callout callout-warn">
+        <strong>⚠ Objeto do convênio GSSP/ATP-41/2025 — limitação crítica:</strong> O Plano de Trabalho delimita expressamente a A.D. aos <strong>arts. 32, 37 e 44 a 57</strong> da Lei 1.415/1993 (ruído, horário de funcionamento e comércio ambulante). Autuações pela PM em A.D. com base nos arts. 8º, 12, 13, 30 e 31 — embora cabíveis em tese — estão fora do objeto formal do convênio e podem ser anuladas. Para cobrir essas hipóteses, o GIAF deve atuar diretamente ou o objeto do convênio deve ser ampliado em reunião da Comissão Paritária.
+      </div>
+      <div class="callout callout-info">
+        <strong>Relação com o GIAF (Decreto 4.947/2026, art. 2º, §único — texto verificado):</strong> A PM atua junto ao GIAF <em>"exclusivamente para fins de apoio, segurança das equipes e garantia da ordem pública, respeitadas as competências legais de cada órgão."</em> — Isto significa que, mesmo em operação conjunta PM + GIAF, a PM não exerce o poder de polícia administrativa do GIAF. Quem lavra, interdita e aplica sanção é o agente do GIAF; a PM garante a segurança e o cumprimento.
+      </div>
+      <div class="legal-base">Lei Municipal 1.308/2021 [a confirmar]; Decreto 4.250/2022; Decreto 4.947/2026, art. 2º, §único; Lei Estadual 10.291/1968; LC 1.372/2022; STF/STJ — delegação entre entes públicos é válida.</div>
+    </div>
+
+    <div class="subsec" id="s2-3">
+      <div class="subsec-title">2.3. Atuação ordinária da PM — independe de convênio</div>
+      <ul class="doc-list">
+        <li><strong>Perturbação do sossego:</strong> LCP art. 42 — TCO ou flagrante, independe de decibelímetro ou convênio.</li>
+        <li><strong>Crimes em flagrante:</strong> ECA art. 243, Lei de Drogas, Estatuto do Desarmamento, CP — prisão imediata.</li>
+        <li><strong>Apoio a agente do GIAF:</strong> garantia de segurança e cumprimento dos atos — sempre possível.</li>
+        <li><strong>Isolamento por perigo iminente:</strong> isolar local em risco concreto (incêndio, tumulto com risco de vida).</li>
+      </ul>
+    </div>
+
+    <div class="subsec" id="s2-4">
+      <div class="subsec-title">2.4. O que a PM NÃO pode — limites inderrogáveis</div>
+      <div class="callout callout-danger">
+        <strong>⛔ VEDADO — mesmo em Atividade Delegada, salvo disposição expressa no convênio e plano de trabalho:</strong>
+      </div>
+      <ul class="doc-list">
+        <li><strong>Cassar alvará:</strong> ato exclusivo do Prefeito, em processo administrativo formal com contraditório.</li>
+        <li><strong>Interditar/lacrar por falta de alvará sem agente do GIAF/fiscal e sem processo:</strong> jurisprudência dominante do TJSP e STJ invalida esse ato.</li>
+        <li><strong>Lavrar auto sem previsão no convênio:</strong> Decreto 4.960/2026 atribui essa competência aos Agentes Fiscais / GIAF.</li>
+        <li><strong>Usar limites de dB de outros municípios:</strong> usar apenas os limites da Lei 1.415/1993 de Valparaíso/SP.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ S3: MEDIDAS ══ -->
+  <div class="section" id="sec-3" data-title="3. Medidas administrativas">
+    <div class="sec-title"><span class="sec-num">3</span>Catálogo de medidas administrativas</div>
+
+    <div class="table-wrap">
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Medida</th>
+            <th>Quando se aplica</th>
+            <th>Autoridade</th>
+            <th>Ação da PM</th>
+            <th>Base legal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Advertência</strong></td>
+            <td>Infração leve, primeira ocorrência, irregularidade sanável no ato.</td>
+            <td>Fiscal / GIAF. PM em A.D. (se convênio prevê).</td>
+            <td>Lavra Termo de Advertência no local. Não paralisa a atividade se a irregularidade for cessada.</td>
+            <td>Lei 1.415/1993; Cód. Posturas.</td>
+          </tr>
+          <tr>
+            <td><strong>Multa</strong></td>
+            <td>Descumprimento de posturas: funcionamento além do horário do alvará, obstrução de calçada, falta de documentos, reincidência.</td>
+            <td>GIAF / Agentes Fiscais (Decreto 4.960/2026). PM em A.D. com previsão expressa no convênio.</td>
+            <td>Lavratura imediata do auto municipal com artigo correto da Lei 1.415/1993. Reincidência: valor dobrado.</td>
+            <td>Decreto Municipal nº 4.960/2026; Lei 1.415/1993, art. 62.</td>
+          </tr>
+          <tr>
+            <td><strong>Remoção compulsória</strong></td>
+            <td>Mesas, cadeiras, equipamentos sonoros em via pública sem autorização (arts. 7º, 8º, 12, 19, 21, 30, 31, 32 da Lei 1.415/1993).</td>
+            <td>GIAF. PM em A.D. (se previsto). Requisição de caminhões da Secretaria de Obras.</td>
+            <td>Retirada dos bens para pátio municipal. Liberação condicionada à quitação de multas e taxas.</td>
+            <td>Decreto Municipal nº 4.960/2026; Lei 1.415/1993, art. 62.</td>
+          </tr>
+          <tr>
+            <td><strong>Fechamento imediato (turno)</strong></td>
+            <td>Flagrante de funcionamento fora do horário-limite do alvará. O local pode operar normalmente no dia seguinte.</td>
+            <td>GIAF ou PM em A.D. com previsão.</td>
+            <td>Ordem verbal imperativa. Recusa = desobediência (CP art. 330). PM permanece até o esvaziamento e portas baixadas.</td>
+            <td>Lei 2.254/2017 [confirmar]; Lei 1.415/1993; CP art. 330.</td>
+          </tr>
+          <tr>
+            <td><strong>Interdição (parcial ou total)</strong></td>
+            <td>Risco iminente à saúde/segurança; perturbação incontrolável; falta total de alvará com riscos estruturais; reincidência grave.</td>
+            <td>GIAF (ato formal, Decreto 4.947/2026 art. 6º, III). PM garante a execução. Reabertura depende de desinterdição pela Prefeitura.</td>
+            <td>Esvaziamento completo. Lacre somente com previsão no POP do convênio e com agente do GIAF presente.</td>
+            <td>Decreto 4.947/2026 art. 6º, III; Lei Orgânica art. 5º, §1º, V; CF art. 5º, LV.</td>
+          </tr>
+          <tr>
+            <td><strong>Cassação de alvará</strong></td>
+            <td>Infrator contumaz; reincidência sistemática; ponto de tráfico ou desordem endêmica.</td>
+            <td>Prefeito — <em>exclusivamente</em>, em processo administrativo formal. O GIAF instrui, documenta e propõe; o ato de cassação é do Prefeito. O Decreto 4.947/2026 art. 6º, VI deve ser lido em conformidade com a Lei Orgânica art. 5º, §1º, V.</td>
+            <td>Não é ato de rua. PM elabora BOPMs e relatórios e remete por Ofício à Prefeitura para instauração do processo.</td>
+            <td>Lei Orgânica art. 5º, §1º, V; Lei 9.784/1999 (analógica); CF art. 5º, LV.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ S4: POPs ══ -->
+  <div class="section" id="sec-4" data-title="4. POPs operacionais">
+    <div class="sec-title"><span class="sec-num">4</span>Procedimentos Operacionais Padrão</div>
+
+    <!-- POP 1 -->
+    <div class="pop-card open" id="pop1">
+      <div class="pop-header" onclick="togglePop('pop1')">
+        <span class="pop-num">POP 1</span>
+        <span class="pop-title">Estabelecimento sem alvará</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <div class="callout callout-info"><strong>Fundamento:</strong> Violação direta à Lei 1.415/1993 e Lei Orgânica (art. 5º, §1º, IV). Sem alvará deferido, o estabelecimento é clandestino. Riscos estruturais (AVCB inexistente) podem agravar o quadro.</div>
+
+        <div class="scenario">
+          <div class="scenario-label">Cenário A — sem GIAF/fiscal e sem flagrante de crime</div>
+          <ul class="doc-list">
+            <li>Solicitar exibição do alvará. Registrar recusa ou protocolo ainda não deferido.</li>
+            <li><strong>NÃO fechar/lacrar autonomamente.</strong> O fechamento por ausência de alvará exige agente do GIAF e processo administrativo (jurisprudência TJSP/STJ — ver Seção 5).</li>
+            <li>Lavrar BOPM detalhado com fotografias, qualificação do responsável, número de frequentadores.</li>
+            <li>Comunicar imediatamente ao GIAF por ofício ou contato direto com o Coordenador.</li>
+            <li>Verificar flagrante de crime concorrente: tráfico, arma, menor consumindo álcool — nesses casos, prender em flagrante imediatamente.</li>
+          </ul>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-label">Cenário B — com agente do GIAF presente</div>
+          <ul class="doc-list">
+            <li>Garantir segurança do agente do GIAF e do ato fiscal.</li>
+            <li>Isolar perímetro, conter resistência com uso progressivo da força.</li>
+            <li>GIAF tem competência expressa para: lavrar auto, aplicar interdição total, apreender bens (Decreto 4.947/2026, art. 6º).</li>
+            <li>Descumprimento da ordem do GIAF: CP art. 330 (desobediência) — conduzir à autoridade policial.</li>
+            <li>PM assiste e garante o lacre físico; o auto é lavrado pelo GIAF.</li>
+          </ul>
+        </div>
+
+        <div class="scenario">
+          <div class="scenario-label">Cenário C — em Atividade Delegada com previsão expressa no convênio</div>
+          <ul class="doc-list">
+            <li>Lavrar auto de infração municipal no talonário da Prefeitura com artigo correto da Lei 1.415/1993.</li>
+            <li>Aplicar fechamento imediato do turno (não lacração definitiva, salvo risco iminente com GIAF ou POP do convênio).</li>
+            <li>Notificar responsável: retomada antes da regularização = desobediência (CP art. 330) + novo auto.</li>
+            <li>BOPM pormenorizado com fotos antes e depois do fechamento.</li>
+          </ul>
+        </div>
+        <div class="legal-base">Lei 1.415/1993; Decreto 4.947/2026 art. 6º; Decreto 4.960/2026; Lei Orgânica art. 5º, §1º, IV; CP arts. 330, 301; Decreto 4.250/2022 (texto integral verificado — composição nominal da Comissão Paritária confirmada).</div>
+      </div>
+    </div>
+
+    <!-- POP 2 -->
+    <div class="pop-card" id="pop2">
+      <div class="pop-header" onclick="togglePop('pop2')">
+        <span class="pop-num">POP 2</span>
+        <span class="pop-title">Funcionamento fora do horário do alvará</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <div class="callout callout-ok">
+        <strong>✔ Horário verificado:</strong> Não existe lei municipal fixando horário único para bares. O horário-limite de cada estabelecimento consta do seu <strong>alvará individual</strong>, com base no art. 37 da Lei 1.415/1993 (fechamento entre 18h e 22h nos dias úteis como regra geral; horários especiais por autorização expressa no alvará). O policial verifica o horário no espelho do alvará afixado no estabelecimento — esse é o limite legal aplicável.
+      </div>
+        <ul class="doc-list">
+          <li>Verificar o horário constante no espelho do alvará afixado no estabelecimento.</li>
+          <li>Dar ordem verbal clara e documentada ao gerente/proprietário para encerramento imediato.</li>
+          <li>Lavrar auto de infração de multa (GIAF ou PM em A.D. com previsão) ou comunicar GIAF para lavratura.</li>
+          <li>Aplicar <strong>fechamento imediato do turno:</strong> PM permanece até o último cliente sair e as portas serem baixadas.</li>
+          <li>Recusa em encerrar: CP art. 330 (desobediência) — conduzir à autoridade policial.</li>
+          <li>Não lacrar definitivamente: o local tem alvará regular para operar no horário permitido.</li>
+        </ul>
+        <div class="legal-base">Lei Ordinária nº 2.254/2017 [texto a obter]; Lei 1.415/1993, art. 62; Decreto Municipal nº 4.960/2026; CP art. 330.</div>
+      </div>
+    </div>
+
+    <!-- POP 3 -->
+    <div class="pop-card" id="pop3">
+      <div class="pop-header" onclick="togglePop('pop3')">
+        <span class="pop-num">POP 3</span>
+        <span class="pop-title">Poluição sonora / som alto</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <div class="scenario">
+          <div class="scenario-label">Via penal — sem decibelímetro (sempre disponível)</div>
+          <div class="callout callout-info" style="margin-bottom:10px"><strong>Fundamento jurisprudencial STJ/TJSP:</strong> o art. 42 da LCP não exige aferição técnica. Perturbação efetiva, provada por relato da guarnição e de vítimas, é suficiente para configurar a contravenção.</div>
+          <ul class="doc-list">
+            <li>Colher relato formal de testemunhas/vítimas dispostas a representar; qualificar responsável.</li>
+            <li>Determinar desligamento imediato da fonte sonora. Recusa = desobediência (CP art. 330).</li>
+            <li><strong>Apreender o equipamento de som como corpo de delito</strong> para cessar o ilícito continuado — LCP art. 42 c/c CPP arts. 240 e 6º, II.</li>
+            <li>Conduzir responsável para TCO ou Distrito Policial se a perturbação for grave.</li>
+            <li>Lavrar auto de infração de posturas (em A.D. com previsão ou com GIAF).</li>
+            <li>Registrar BOPM: horário, fonte sonora, distância estimada, perceptibilidade, número de pessoas.</li>
+          <li><strong>Cumulatividade:</strong> bar com amplificador após 18h infringe simultaneamente o <strong>art. 32</strong> (perturbação do sossego — R$ 583,99) E o <strong>art. 33</strong> (propaganda sonora fora do horário 8h–18h, sem licença). O auto pode cumular os dois fundamentos. O GIAF deve lavrar com base nos dois artigos — dobra o impacto punitivo e reforça o dossiê para cassação.</li>
+          </ul>
+        </div>
+        <div class="scenario">
+          <div class="scenario-label">Via administrativa — com decibelímetro</div>
+          <ul class="doc-list">
+            <li>Medição conforme ABNT NBR 10.151/2019 — no limite da propriedade afetada ou no interior da residência do reclamante.</li>
+            <li>Comparar ao limite do Código de Posturas de Valparaíso/SP <strong>[a confirmar em dB por zona]</strong>. Não usar limites de SP Capital.</li>
+            <li>Acima do limite: auto de infração de multa + interdição parcial (lacrar amplificadores e caixas acústicas).</li>
+            <li>Se configurar crime ambiental (patamar elevado, dano à saúde comprovado): TCO com fundamento no art. 54 da Lei 9.605/1998.</li>
+          </ul>
+        </div>
+        <div class="legal-base">LCP art. 42; CPP arts. 6º e 240; ABNT NBR 10.151/2019; CONAMA 001/1990; Lei 9.605/1998 art. 54; Lei 1.415/1993.</div>
+      </div>
+    </div>
+
+    <!-- POP 4 -->
+    <div class="pop-card" id="pop4">
+      <div class="pop-header" onclick="togglePop('pop4')">
+        <span class="pop-num">POP 4</span>
+        <span class="pop-title">Aglomeração, algazarra e perturbação generalizada</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <ul class="doc-list">
+          <li>Deslocar em força-tarefa com múltiplas viaturas se o histórico do local indicar risco.</li>
+          <li>Abordagens táticas; restabelecimento da malha viária e segurança perimetral.</li>
+          <li><strong>Briga / lesão corporal:</strong> CP arts. 129 e 137 — prender em flagrante, prestar socorro.</li>
+          <li><strong>Algazarra / perturbação:</strong> LCP art. 42 — TCO, dispersão, identificação dos autores principais.</li>
+          <li><strong>Embriaguez escandalosa:</strong> LCP art. 62 — conduzir à autoridade policial.</li>
+          <li><strong>Interdição cautelar policial:</strong> possível quando há risco iminente concreto de tumulto generalizado ou crime contra a vida. Formalizar em BOPM e comunicar ao GIAF para lavratura do ato formal.</li>
+          <li><strong>Construção do dossiê para cassação:</strong> cada BOPM de ocorrência no mesmo endereço é peça do dossiê encaminhado ao GIAF/Prefeitura para cassação do alvará (Lei Orgânica art. 5º, §1º, V).</li>
+        </ul>
+        <div class="legal-base">LCP arts. 42 e 62; CP arts. 129, 137, 330; CPP art. 301; Lei Orgânica art. 5º, §1º, V.</div>
+      </div>
+    </div>
+
+    <!-- POP 5 -->
+    <div class="pop-card" id="pop5">
+      <div class="pop-header" onclick="togglePop('pop5')">
+        <span class="pop-num">POP 5</span>
+        <span class="pop-title">Ocupação irregular de via pública</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <ul class="doc-list">
+          <li>Exigir exibição da autorização municipal (permissão de uso) para a área ocupada com mesas e cadeiras.</li>
+          <li>Ausência de autorização: ordem de desobstrução imediata. Registrar com fotografias.</li>
+          <li>Lavrar auto de infração (GIAF ou PM em A.D.) com base no <strong>art. 8º</strong> (embaraçar trânsito de pedestres) ou <strong>art. 12</strong> (obstruir passeio), ambos com multa de R$ 194,66 e remoção compulsória. <em>Atenção: o art. 13 apenas autoriza mesas mediante licença — não tem multa própria no Decreto 4.960/2026.</em></li>
+          <li><strong>Recusa em retirar:</strong> requisitar caminhão da Secretaria de Obras para apreensão do mobiliário. Liberação somente após quitação de multas e taxas de estadia.</li>
+          <li>Risco a pedestres (idosos, cadeirantes): exigir desobstrução imediata. Omissão pode configurar desobediência (CP art. 330).</li>
+        </ul>
+        <div class="legal-base">Lei 1.415/1993 art. 13 (autorização de mesas — sem multa própria); art. 8º (multa R$ 194,66 — embaraçar trânsito de pedestres) e art. 12 (multa R$ 194,66 — obstruir passeio), ambos com remoção compulsória; Decreto 4.960/2026; CP art. 330.</div>
+      </div>
+    </div>
+
+    <!-- POP 6 -->
+    <div class="pop-card" id="pop6">
+      <div class="pop-header" onclick="togglePop('pop6')">
+        <span class="pop-num">POP 6</span>
+        <span class="pop-title">Venda de bebida alcoólica a menor</span>
+        <span class="pop-chevron">▶</span>
+      </div>
+      <div class="pop-body">
+        <div class="callout callout-danger"><strong>Crime formal — flagrante imediato, independe de convênio ou processo administrativo.</strong></div>
+        <ul class="doc-list">
+          <li>Identificar o responsável pela venda (proprietário ou funcionário).</li>
+          <li>Prender em flagrante ou lavrar TCO — ECA art. 243 (detenção de 2 a 4 anos).</li>
+          <li>Comunicar ao GIAF para instauração de processo administrativo adicional (cassação de alvará — Lei Orgânica art. 5º, §1º, V).</li>
+        </ul>
+        <div class="legal-base">ECA arts. 81 e 243; CPP art. 301; Lei Orgânica art. 5º, §1º, V.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ S5: JURISPRUDÊNCIA ══ -->
+  <div class="section" id="sec-5" data-title="5. Jurisprudência">
+    <div class="sec-title"><span class="sec-num">5</span>Jurisprudência consolidada</div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.1. Interdição sem devido processo legal — invalidade</div>
+      <div class="juris-ementa">"Revela-se abusiva e ilegal a cassação de alvará de funcionamento e interdição de estabelecimento sem prévio procedimento administrativo que garanta ao particular o exercício da ampla defesa e do contraditório."</div>
+      <div class="juris-fonte">TJ-RS, Agravo de Instrumento nº 70073164394, Vigésima Segunda Câmara Cível. Entendimento reiteradamente aplicado pelo TJSP.</div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.2. Competência da PM — limite em fiscalização de alvará</div>
+      <div class="juris-ementa">"A fiscalização de estabelecimentos comerciais é atribuição da administração municipal, devendo ser realizada especialmente por seus agentes, via poder de polícia. Determinada a interdição por autoridade desprovida de competência para a prática do ato e sem a formalização do devido processo legal administrativo, resta evidente a lesão ao direito do impetrante."</div>
+      <div class="juris-fonte">TJSP, Mandado de Segurança — entendimento consolidado sobre interdição policial sem processo.</div>
+      <div style="height:10px"></div>
+      <div class="juris-ementa">"Apesar de legítima a intenção da autoridade policial militar de combater as irregularidades que diz ter constatado, o ato praticado é manifestamente ilegal, porquanto lavrado por quem não detém competência para tanto."</div>
+      <div class="juris-fonte">TJSC, 1ª Câmara de Direito Público.</div>
+      <div class="callout callout-ok" style="margin-top:10px">
+        <strong>Contrapartida (TJSC — embargos de declaração):</strong> há distinção entre o ato de interditar no exercício do poder fiscalizatório de alvarás (competência municipal) e o ato de interditar no exercício da preservação da ordem pública (competência da PM). A PM pode isolar o local e cessar o risco sem configurar usurpação.
+      </div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.3. Validade da delegação do poder de polícia entre entes públicos</div>
+      <p>STF e STJ firmaram que as funções coercitivas do poder de polícia são indelegáveis a pessoas jurídicas de direito <em>privado</em>. Contudo, a delegação entre entes públicos (Município e Estado-membro), por convênio, é constitucionalmente válida. O auto lavrado por PM investido via convênio possui o mesmo peso legal do auto lavrado pelo fiscal originário — desde que o convênio e o plano de trabalho prevejam expressamente essa atribuição.</p>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.4. Desobediência a ordem policial legítima</div>
+      <div class="juris-ementa">"Configura o delito de desobediência, tipificado no artigo 330 do Código Penal, a ação do agente que, tendo o estabelecimento fechado por ordem policial, face a ausência de alvará para funcionamento, promove festa sem autorização da autoridade competente."</div>
+      <div class="juris-fonte">Tribunais estaduais (TJSP e outros), jurisprudência reiterada.</div>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.5. Perturbação do sossego — medição em dB é desnecessária para o tipo penal</div>
+      <p>Entendimento consolidado do STJ e TJSP: a contravenção do art. 42 da LCP configura-se pela perturbação efetiva, provada por relato testemunhal e percepção sensorial da guarnição, independentemente de aferição técnica em decibéis. A medição reforça o auto administrativo, mas não é pressuposto do tipo penal.</p>
+    </div>
+
+    <div class="juris-card">
+      <div class="juris-title">5.6. Responsabilidade civil objetiva do Estado</div>
+      <p>CF art. 37, §6º: o Estado responde pelos danos causados por seus agentes independentemente de dolo ou culpa. Em litígios da Atividade Delegada, a responsabilidade exige apenas conduta do agente, dano e nexo causal.</p>
+      <div class="callout callout-warn"><strong>Proteção:</strong> documentação completa, fotos antes/depois e uso progressivo e proporcional da força são o maior escudo contra ações de reparação civil.</div>
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>Nota sobre jurisprudência recebida de fontes externas:</strong> Referências a "8ª Vara Fazenda SP", "4ª Câmara Criminal" e "multa R$50k/dia" foram fornecidas sem número de processo, data ou relator. Não são verificáveis e foram excluídas deste guia.
+    </div>
+  </div>
+
+  <!-- ══ S6: PROTOCOLO ══ -->
+  <div class="section" id="sec-6" data-title="6. Protocolo de comando">
+    <div class="sec-title"><span class="sec-num">6</span>Protocolo de comando — 5ª Cia PM / 2º BPM/I</div>
+
+    <div class="subsec">
+      <div class="subsec-title">6.1. Antes de empregar a tropa</div>
+      <ul class="doc-list">
+        <li><strong>Articulação com o GIAF (prioridade nº 1):</strong> Coordenador Eneas Pinheiro Neto. Formalizar parceria operacional. Escalar agente do GIAF em operações noturnas de sextas e sábados. Com GIAF presente, a PM atua em plena legalidade para fechamento e interdição.</li>
+        <li><strong>Decretos 4.947 e 4.960/2026:</strong> obter textos integrais junto ao Dep. de Fiscalização.</li>
+        <li><strong>Texto da Lei 1.415/1993:</strong> obter mapeamento artigo × tipo de infração.</li>
+        <li><strong>Lei 2.254/2017:</strong> obter horário-limite vigente para bares e similares.</li>
+        <li><strong>Convênio de Atividade Delegada:</strong> verificar vigência e plano de trabalho.</li>
+        <li><strong>Capacitação:</strong> preleções sobre a Lei 1.415/1993 e Decretos 2026. Distribuir card de bolso.</li>
+        <li><strong>Mapeamento:</strong> lista de estabelecimentos com histórico — SIOPM + Prefeitura. Verificar com o GIAF quais endereços já têm notificações ativas (reincidentes com 4+ notificações já estão na fase de pré-interdição).</li>
+        <li><strong>Histórico de notificações do GIAF:</strong> estabelecimentos que receberam "última notificação" (como o caso de 06/05/2026) são alvo prioritário — o próximo passo da Prefeitura é a interdição.</li>
+      </ul>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">6.2. Durante a abordagem</div>
+      <ul class="doc-list">
+        <li>Identificar e qualificar o responsável presente.</li>
+        <li>Solicitar alvará de funcionamento e licença sanitária — registrar apresentação ou recusa.</li>
+        <li>Verificar horário constante no alvará.</li>
+        <li>Avaliar emissão sonora: fonte, distância, perceptibilidade, equipamentos em via pública.</li>
+        <li>Avaliar ocupação de calçada: fotografar, verificar autorização.</li>
+        <li>Verificar presença de menores consumindo bebida alcoólica.</li>
+        <li>Dar ordens verbais claras e documentadas antes de qualquer medida coercitiva.</li>
+        <li>Registrar BOPM completo mesmo sem condução — o BOPM fundamenta o futuro processo de cassação.</li>
+      </ul>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">6.3. Após a operação</div>
+      <ul class="doc-list">
+        <li>Comunicar o GIAF por ofício individualizado por estabelecimento.</li>
+        <li>Solicitar abertura de processo administrativo em casos de reincidência (3+ BOPMs em 90 dias).</li>
+        <li>Atualizar planilha de controle: endereço, CNPJ, responsável, BOPMs, autos, ofícios.</li>
+        <li>Georreferenciar pontos críticos para planejamento de escalas.</li>
+        <li><strong>Como membro da Comissão Paritária (Decreto 4.250/2022):</strong> levar dados de campo para as reuniões e propor adequações no plano de trabalho.</li>
+      </ul>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">6.4. Documentação mínima por ocorrência</div>
+      <ul class="doc-list">
+        <li>BOPM (SIOPM) — exaustivo: contexto, infração, condições do local, testemunhas, dossiê fotográfico.</li>
+        <li>TCO ou auto de prisão em flagrante (quando cabível).</li>
+        <li>Auto de infração de posturas com artigo correto da Lei 1.415/1993 (em A.D. com previsão ou com GIAF).</li>
+        <li>Registro fotográfico: fachada, equipamentos sonoros, mesas em calçada, aglomeração, antes e depois do fechamento.</li>
+        <li>Termo de declaração de testemunhas/vítimas.</li>
+        <li>Ofício ao GIAF / Prefeitura — Sec. de Negócios Jurídicos / Dep. de Fiscalização.</li>
+        <li>Relatório Circunstanciado de Serviço (em casos de interdição ou reincidência — subsidia cassação).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ S7: SÍNTESE ══ -->
+  <div class="section" id="sec-7" data-title="7. Quadro síntese">
+    <div class="sec-title"><span class="sec-num">7</span>Quadro síntese — uso imediato em briefing</div>
+
+    <div class="sintese-grid">
+      <div class="sintese-col azul">
+        <div class="sintese-head azul">PM PODE (sempre)</div>
+        <div class="sintese-item">Cessar perturbação do sossego (LCP art. 42)</div>
+        <div class="sintese-item">Prender em flagrante: crime / contravenção</div>
+        <div class="sintese-item">Apoiar e garantir segurança do GIAF</div>
+        <div class="sintese-item">Isolar local em perigo iminente concreto</div>
+        <div class="sintese-item">Lavrar TCO / conduzir à autoridade policial</div>
+        <div class="sintese-item">Prender por venda de álcool a menor (ECA 243)</div>
+      </div>
+      <div class="sintese-col verde">
+        <div class="sintese-head verde">PM PODE em A.D.*</div>
+        <div class="sintese-item">Lavrar auto de infração (artigo correto Lei 1.415/93)</div>
+        <div class="sintese-item">Remover mesas e equipamentos de via pública</div>
+        <div class="sintese-item">Fechar imediatamente por horário excedido</div>
+        <div class="sintese-item">Apreender equipamento de som (corpo de delito)</div>
+        <div class="sintese-item">Construir dossiê para cassação de alvará</div>
+        <div class="sintese-item">Mapear e georreferenciar pontos críticos</div>
+      </div>
+      <div class="sintese-col verm">
+        <div class="sintese-head verm">PM NÃO PODE</div>
+        <div class="sintese-item">Cassar alvará — competência exclusiva do Prefeito</div>
+        <div class="sintese-item">Interditar/lacrar sem GIAF/fiscal e sem processo</div>
+        <div class="sintese-item">Lavrar auto sem previsão expressa no convênio</div>
+        <div class="sintese-item">Usar limites de dB de outro município</div>
+        <div class="sintese-item">Realizar inspeção sanitária (Vigilância Sanitária)</div>
+        <div class="sintese-item">Fechar definitivamente sem perigo iminente e sem GIAF</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--textD);margin-top:4px">* A.D. = Atividade Delegada com convênio vigente e plano de trabalho que preveja expressamente a atribuição listada.</p>
+  </div>
+
+    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
+      <div class="pend-num" style="color:var(--greenL)">1</div>
+      <div>
+        <div class="pend-desc"><strong>✔ RESOLVIDA — Decreto nº 4.960/2026</strong> — texto integral recebido em PDF oficial assinado eletronicamente (SEI 0405698). Valores definitivos incorporados ao guia.</div>
+        <div class="pend-dest">→ Concluída em 07/05/2026</div>
+      </div>
+      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
+    </div>
+
+    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
+      <div class="pend-num" style="color:var(--greenL)">2</div>
+      <div>
+        <div class="pend-desc"><strong>✔ RESOLVIDA — Decreto nº 4.947/2026</strong> — texto integral recebido em PDF oficial. Composição, finalidades, competências e medidas do GIAF incorporados ao guia.</div>
+        <div class="pend-dest">→ Concluída em 07/05/2026</div>
+      </div>
+      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
+    </div>
+
+    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
+      <div class="pend-num" style="color:var(--greenL)">3</div>
+      <div>
+        <div class="pend-desc"><strong>✔ RESOLVIDA — Lei 1.415/1993</strong> — texto integral recebido em PDF original assinado de 1993. Mapeamento completo artigo × infração incorporado ao guia.</div>
+        <div class="pend-dest">→ Concluída em 07/05/2026</div>
+      </div>
+      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
+    </div>
+
+    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
+      <div class="pend-num" style="color:var(--greenL)">4</div>
+      <div>
+        <div class="pend-desc"><strong>✔ RESOLVIDA — Lei 2.254/2017</strong> — texto integral verificado. Não trata de horário de bares; altera penalidades do art. 62 da Lei 1.415/1993. Horário de funcionamento consta do alvará individual (art. 37 da Lei 1.415/1993).</div>
+        <div class="pend-dest">→ Concluída em 07/05/2026</div>
+      </div>
+      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
+    </div>
+
+    <div class="pend-item" style="border-color:var(--greenL);opacity:0.7">
+      <div class="pend-num" style="color:var(--greenL)">5</div>
+      <div>
+        <div class="pend-desc"><strong>✔ RESOLVIDA — Convênio GSSP/ATP-41/2025 + Plano de Trabalho</strong> — texto integral do 1º Termo Aditivo e Plano de Trabalho recebidos (SEI 057.00111358/2026-31). Efetivo: 1 Oficial + 3 Praças, 8h/dia, 30 dias/mês. Objeto: arts. 32, 37 e 44–57 da Lei 1.415/1993.</div>
+        <div class="pend-dest">→ Concluída em 07/05/2026</div>
+      </div>
+      <div class="pend-badge media" style="background:rgba(26,122,58,.2);color:#6ee09a;border-color:rgba(39,174,96,.4)">RESOLVIDA</div>
+    </div>
+
+    <div class="pend-item">
+      <div class="pend-num">6</div>
+      <div>
+        <div class="pend-desc"><strong>Formalização de contato operacional com o GIAF</strong> — Coordenador Eneas Pinheiro Neto. Agendar reunião para definir protocolo de operações conjuntas e obter talonário de auto de infração.</div>
+        <div class="pend-dest">→ Dep. de Fiscalização / Prefeitura</div>
+      </div>
+      <div class="pend-badge alta">OPERACIONAL</div>
+    </div>
+
+    <div class="pend-item">
+      <div class="pend-num">7</div>
+      <div>
+        <div class="pend-desc"><strong>Modelo oficial do auto de infração de posturas</strong> (talonário da Prefeitura de Valparaíso/SP). Necessário antes de qualquer lavratura pela PM em Atividade Delegada.</div>
+        <div class="pend-dest">→ GIAF / Dep. de Fiscalização</div>
+      </div>
+      <div class="pend-badge alta">OPERACIONAL</div>
+    </div>
+
+    <div class="pend-item">
+      <div class="pend-num">8</div>
+      <div>
+        <div class="pend-desc"><strong>Lista de estabelecimentos com notificações ativas do GIAF</strong> — reincidentes já no processo administrativo são alvos prioritários. Estabelecimentos com 4+ notificações estão em fase de pré-interdição.</div>
+        <div class="pend-dest">→ GIAF / Dep. de Fiscalização</div>
+      </div>
+      <div class="pend-badge alta">OPERACIONAL</div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <span>📋 5ª Cia PM · 2º BPM/I · Valparaíso/SP</span>
+    <span>📅 Versão 9 · Maio 2026</span>
+    <span>⚖ Versão definitiva operacional · Sem pendências</span>
+  </div>
+
+</main>
+</div>
+
+<!-- ══ PAINEL DE ANOTAÇÕES ══ -->
+<div id="notes-panel">
+  <div class="notes-header">
+    <h3>ANOTAÇÕES</h3>
+    <button id="notes-close" onclick="toggleNotes()">✕</button>
+  </div>
+  <div id="notes-area">
+    <textarea id="notes-input" placeholder="Digite sua anotação sobre esta seção…" rows="4"></textarea>
+    <div class="notes-save-row">
+      <button class="btn primary" onclick="saveNote()">Salvar</button>
+      <button class="btn" onclick="clearNotes()">Limpar todas</button>
+    </div>
+    <div id="notes-list" style="margin-top:16px"></div>
+    <div id="notes-empty" style="display:none">Nenhuma anotação ainda.</div>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION DATA ──
+const sections = [
+  { id:'sec-0', num:'★', title:'Início / Metodologia', subs:[] },
+  { id:'sec-1', num:'1', title:'Base normativa', subs:[
+    {id:'s1-1',title:'1.1 Lei Orgânica'},
+    {id:'s1-2',title:'1.2 Lei 1.415/1993'},
+    {id:'s1-3a',title:'1.3-A Decreto 4.960/2026'},
+    {id:'s1-3b',title:'1.3-B Decreto 4.947/2026 — GIAF'},
+    {id:'s1-4',title:'1.4 Lei 2.254/2017'},
+    {id:'s1-5',title:'1.5 Lei 2.133/2011 + Decreto 4.250'},
+    {id:'s1-6',title:'1.6 Normas federais e estaduais'},
+  ]},
+  { id:'sec-2', num:'2', title:'Poder de polícia', subs:[
+    {id:'s2-1',title:'2.1 Competência originária'},
+    {id:'s2-2',title:'2.2 Atividade Delegada'},
+    {id:'s2-3',title:'2.3 Atuação ordinária da PM'},
+    {id:'s2-4',title:'2.4 O que a PM NÃO pode'},
+  ]},
+  { id:'sec-3', num:'3', title:'Medidas administrativas', subs:[] },
+  { id:'sec-4', num:'4', title:'POPs operacionais', subs:[
+    {id:'pop1',title:'POP 1 — Sem alvará'},
+    {id:'pop2',title:'POP 2 — Fora do horário'},
+    {id:'pop3',title:'POP 3 — Som alto'},
+    {id:'pop4',title:'POP 4 — Aglomeração'},
+    {id:'pop5',title:'POP 5 — Via pública'},
+    {id:'pop6',title:'POP 6 — Menor e álcool'},
+  ]},
+  { id:'sec-5', num:'5', title:'Jurisprudência', subs:[] },
+  { id:'sec-6', num:'6', title:'Protocolo de comando', subs:[] },
+  { id:'sec-7', num:'7', title:'Quadro síntese', subs:[] },
+
+];
+
+let currentSec = 'sec-0';
+
+// ── BUILD NAV ──
+function buildNav() {
+  const nav = document.getElementById('nav-list');
+  nav.innerHTML = sections.map(s => `
+    <div class="nav-section">
+      <div class="nav-h1 ${s.id==='sec-0'?'active':''}" onclick="navTo('${s.id}',this)">
+        <span class="num">${s.num}</span>
+        <span>${s.title}</span>
+      </div>
+      ${s.subs.length ? `
+        <div class="nav-h2-list ${s.id==='sec-0'?'open':''}">
+          ${s.subs.map(sub=>`
+            <div class="nav-h2" onclick="scrollToSub('${sub.id}','${s.id}')">${sub.title}</div>
+          `).join('')}
+        </div>` : ''}
+    </div>
+  `).join('');
+}
+
+function navTo(secId, el) {
+  // hide all sections
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(secId).classList.add('active');
+  // update nav
+  document.querySelectorAll('.nav-h1').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.nav-h2-list').forEach(n=>n.classList.remove('open'));
+  if(el) {
+    el.classList.add('active');
+    const list = el.nextElementSibling;
+    if(list && list.classList.contains('nav-h2-list')) list.classList.add('open');
+  }
+  currentSec = secId;
+  document.getElementById('main').scrollTop = 0;
+  updateProgress();
+  renderNotes();
+}
+
+function scrollToSub(subId, secId) {
+  // First navigate to section
+  const h1el = document.querySelector(`.nav-h1[onclick*="${secId}"]`);
+  navTo(secId, h1el);
+  setTimeout(()=>{
+    const el = document.getElementById(subId);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    // For POPs, open if closed
+    if(subId.startsWith('pop')) {
+      const card = document.getElementById(subId);
+      if(card && !card.classList.contains('open')) togglePop(subId);
+    }
+  }, 50);
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  const idx = sections.findIndex(s=>s.id===currentSec);
+  const pct = Math.round(((idx+1)/sections.length)*100);
+  document.getElementById('progress-bar').style.width = pct+'%';
+}
+
+// ── POP TOGGLE ──
+function togglePop(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+// ── SIDEBAR TOGGLE ──
+const sidebar = document.getElementById('sidebar');
+const toggle = document.getElementById('sidebar-toggle');
+let collapsed = false;
+toggle.addEventListener('click', ()=>{
+  collapsed = !collapsed;
+  sidebar.classList.toggle('collapsed', collapsed);
+  toggle.textContent = collapsed ? '▶' : '◀';
+});
+
+// ── SEARCH ──
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', debounce(doSearch, 300));
+
+function doSearch() {
+  const q = searchInput.value.trim().toLowerCase();
+  if(!q) { clearHighlights(); return; }
+  clearHighlights();
+  let firstFound = null;
+  sections.forEach(s=>{
+    const el = document.getElementById(s.id);
+    if(!el) return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let node;
+    while(node = walker.nextNode()) {
+      const txt = node.textContent;
+      const lower = txt.toLowerCase();
+      if(lower.includes(q)) {
+        const regex = new RegExp(`(${escapeReg(q)})`, 'gi');
+        const span = document.createElement('span');
+        span.innerHTML = txt.replace(regex,'<mark>$1</mark>');
+        node.parentNode.replaceChild(span, node);
+        if(!firstFound) firstFound = s.id;
+      }
+    }
+  });
+  if(firstFound) {
+    const h1el = document.querySelector(`.nav-h1[onclick*="${firstFound}"]`);
+    navTo(firstFound, h1el);
+  }
+}
+
+function clearHighlights() {
+  document.querySelectorAll('mark').forEach(m=>{
+    const parent = m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+}
+
+function escapeReg(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function debounce(fn, ms) { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
+
+// ── NOTES ──
+function toggleNotes() {
+  document.getElementById('notes-panel').classList.toggle('open');
+  renderNotes();
+}
+
+function saveNote() {
+  const txt = document.getElementById('notes-input').value.trim();
+  if(!txt) return;
+  const notes = getNotes();
+  notes.push({ sec: currentSec, text: txt, ts: Date.now() });
+  localStorage.setItem('pmesp_guia_notes', JSON.stringify(notes));
+  document.getElementById('notes-input').value = '';
+  renderNotes();
+}
+
+function getNotes() {
+  try { return JSON.parse(localStorage.getItem('pmesp_guia_notes')||'[]'); } catch(e) { return []; }
+}
+
+function deleteNote(idx) {
+  const notes = getNotes();
+  notes.splice(idx,1);
+  localStorage.setItem('pmesp_guia_notes', JSON.stringify(notes));
+  renderNotes();
+}
+
+function clearNotes() {
+  if(confirm('Apagar todas as anotações?')) {
+    localStorage.removeItem('pmesp_guia_notes');
+    renderNotes();
+  }
+}
+
+function renderNotes() {
+  const notes = getNotes();
+  const list = document.getElementById('notes-list');
+  const empty = document.getElementById('notes-empty');
+  if(!notes.length) { list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  const secLabel = id => { const s = sections.find(x=>x.id===id); return s ? s.title : id; };
+  list.innerHTML = notes.map((n,i)=>`
+    <div class="note-entry">
+      <button class="note-del" onclick="deleteNote(${i})">✕</button>
+      <div class="note-sec">${secLabel(n.sec)}</div>
+      <div class="note-text">${n.text.replace(/\n/g,'<br>')}</div>
+    </div>
+  `).join('');
+}
+
+// ── PWA INSTALL ──
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-btn').style.display = 'flex';
+});
+function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => {
+    deferredPrompt = null;
+    document.getElementById('install-btn').style.display = 'none';
+  });
+}
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-btn').style.display = 'none';
+});
+
+// ── INIT ──
+buildNav();
+updateProgress();
+renderNotes();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(r => console.log('SW registrado'))
+      .catch(e => console.log('SW falhou:', e));
+  });
+}
+</script>
+</body>
+</html>
